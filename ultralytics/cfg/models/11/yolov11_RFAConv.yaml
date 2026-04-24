@@ -1,0 +1,63 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# YOLO11-P2-RFA: Optimized for Tiny Astronomical Objects
+# Innovation 1: P2 Head (Stride 4) for tiny object resolution
+# Innovation 2: RFAConv in Deep Backbone & Neck for attention-guided feature fusion
+
+# Parameters
+nc: 1 # 根据你的数据集修改类别数
+scales: 
+  n: [0.50, 0.25, 1024]
+  s: [0.50, 0.50, 1024]
+  m: [0.50, 1.00, 512]
+  l: [1.00, 1.00, 512]
+  x: [1.00, 1.50, 512]
+
+backbone:
+  # [from, repeats, module, args]
+  # === 1. 浅层保持纯净 (Standard Conv) ===
+  # 严禁在 Layer 0, 1 使用 RFAConv，否则星星会消失
+  - [-1, 1, Conv, [64, 3, 2]]   # 0-P1/2
+  - [-1, 1, Conv, [128, 3, 2]]  # 1-P2/4 (P2特征层，关键！)
+  - [-1, 2, C3k2, [256, False, 0.25]]
+  - [-1, 1, Conv, [256, 3, 2]]  # 3-P3/8
+  - [-1, 2, C3k2, [512, False, 0.25]]
+  
+  # === 2. 深层引入 RFAConv (创新点 A) ===
+  # 此时特征图较小，RFAConv 负责提取语义上下文
+  - [-1, 1, RFAConv, [512, 3, 2]]  # 5-P4/16 (原 Conv 替换为 RFA)
+  - [-1, 2, C3k2, [512, True]]
+  - [-1, 1, RFAConv, [1024, 3, 2]] # 7-P5/32 (原 Conv 替换为 RFA)
+  - [-1, 2, C3k2, [1024, True]]
+  - [-1, 1, SPPF, [1024, 5]]       # 9
+  - [-1, 2, C2PSA, [1024]]         # 10
+
+head:
+  # === 上采样流 (Upsample Path) ===
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 11: P5 -> P4
+  - [[-1, 6], 1, Concat, [1]]                  # 12: cat backbone P4
+  - [-1, 2, C3k2, [512, False]]                # 13: Fusion P4
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 14: P4 -> P3
+  - [[-1, 4], 1, Concat, [1]]                  # 15: cat backbone P3
+  - [-1, 2, C3k2, [256, False]]                # 16: Fusion P3
+
+  # === 增加 P2 上采样 (P2 Head 关键步骤) ===
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 17: P3 -> P2
+  - [[-1, 2], 1, Concat, [1]]                  # 18: cat backbone P2 (Layer 2前)
+  - [-1, 2, C3k2, [128, False]]                # 19: Output P2 (Tiny Object Head)
+
+  # === 下采样流 (Downsample Path) ===
+  # === 3. Neck 下采样引入 RFAConv (创新点 B) ===
+  # 利用注意力机制引导高分辨率特征融合
+  - [-1, 1, RFAConv, [256, 3, 2]]              # 20: P2 -> P3 (使用 RFAConv)
+  - [[-1, 16], 1, Concat, [1]]                 # 21: cat P3 fusion
+  - [-1, 2, C3k2, [256, False]]                # 22: Output P3
+
+  - [-1, 1, RFAConv, [512, 3, 2]]              # 23: P3 -> P4 (使用 RFAConv)
+  - [[-1, 13], 1, Concat, [1]]                 # 24: cat P4 fusion
+  - [-1, 2, C3k2, [512, False]]                # 25: Output P4
+
+  # === 检测头 Detect ===
+  # 输出层对应 [P2, P3, P4] -> [19, 22, 25]
+  # 抛弃了 P5 头，因为它对微小目标无用
+  - [[19, 22, 25], 1, Detect, [nc]]
