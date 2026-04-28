@@ -1,5 +1,6 @@
 # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 
+from .conv.RFAConv import CAConv, CBAMConv, RFAConv, RFCAConv, RFCBAMConv
 from .tasks import (
     BaseModel,
     ClassificationModel,
@@ -12,7 +13,6 @@ from .tasks import (
     torch_safe_load,
     yaml_model_load,
 )
-from .conv.RFAConv import RFAConv, RFCBAMConv, RFCAConv, CAConv, CBAMConv
 
 __all__ = (
     "BaseModel",
