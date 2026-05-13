@@ -12,6 +12,9 @@
 train: /home/yangpengchao/caoxinyao/ultralytics-main/dataset/train
 val:   /home/yangpengchao/caoxinyao/ultralytics-main/dataset/val
 
+# KiDS u/g/r/i four-band cutouts
+channels: 4
+
 # Classes
 nc: 1
 names:

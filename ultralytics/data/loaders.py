@@ -108,7 +108,9 @@ class LoadStreams:
         self.running = True  # running flag for Thread
         self.mode = "stream"
         self.vid_stride = vid_stride  # video frame-rate stride
-        self.cv2_flag = cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_COLOR  # grayscale or RGB
+        self.cv2_flag = (
+            cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_UNCHANGED if channels > 3 else cv2.IMREAD_COLOR
+        )  # grayscale, RGB, or multispectral
 
         sources = Path(sources).read_text().rsplit() if os.path.isfile(sources) else [sources]
         n = len(sources)
@@ -282,7 +284,9 @@ class LoadScreenshots:
         self.sct = mss.mss()
         self.bs = 1
         self.fps = 30
-        self.cv2_flag = cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_COLOR  # grayscale or RGB
+        self.cv2_flag = (
+            cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_UNCHANGED if channels > 3 else cv2.IMREAD_COLOR
+        )  # grayscale, RGB, or multispectral
 
         # Parse monitor shape
         monitor = self.sct.monitors[self.screen]
@@ -392,7 +396,9 @@ class LoadImagesAndVideos:
         self.mode = "video" if ni == 0 else "image"  # default to video if no images
         self.vid_stride = vid_stride  # video frame-rate stride
         self.bs = batch
-        self.cv2_flag = cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_COLOR  # grayscale or RGB
+        self.cv2_flag = (
+            cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_UNCHANGED if channels > 3 else cv2.IMREAD_COLOR
+        )  # grayscale, RGB, or multispectral
         if any(videos):
             self._new_video(videos[0])  # new video
         else:

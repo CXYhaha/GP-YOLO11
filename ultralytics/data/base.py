@@ -113,7 +113,9 @@ class BaseDataset(Dataset):
         self.prefix = prefix
         self.fraction = fraction
         self.channels = channels
-        self.cv2_flag = cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_COLOR
+        self.cv2_flag = (
+            cv2.IMREAD_GRAYSCALE if channels == 1 else cv2.IMREAD_UNCHANGED if channels > 3 else cv2.IMREAD_COLOR
+        )
         self.im_files = self.get_img_files(self.img_path)
         self.labels = self.get_labels()
         self.update_labels(include_class=classes)  # single_cls and include_class
@@ -283,7 +285,7 @@ class BaseDataset(Dataset):
         """Save an image as an *.npy file for faster loading."""
         f = self.npy_files[i]
         if not f.exists():
-            np.save(f.as_posix(), imread(self.im_files[i]), allow_pickle=False)
+            np.save(f.as_posix(), imread(self.im_files[i], flags=self.cv2_flag), allow_pickle=False)
 
     def check_cache_disk(self, safety_margin: float = 0.5) -> bool:
         """
@@ -301,7 +303,7 @@ class BaseDataset(Dataset):
         n = min(self.ni, 30)  # extrapolate from 30 random images
         for _ in range(n):
             im_file = random.choice(self.im_files)
-            im = imread(im_file)
+            im = imread(im_file, flags=self.cv2_flag)
             if im is None:
                 continue
             b += im.nbytes
@@ -334,7 +336,7 @@ class BaseDataset(Dataset):
         b, gb = 0, 1 << 30  # bytes of cached images, bytes per gigabytes
         n = min(self.ni, 30)  # extrapolate from 30 random images
         for _ in range(n):
-            im = imread(random.choice(self.im_files))  # sample image
+            im = imread(random.choice(self.im_files), flags=self.cv2_flag)  # sample image
             if im is None:
                 continue
             ratio = self.imgsz / max(im.shape[0], im.shape[1])  # max(h, w)  # ratio
