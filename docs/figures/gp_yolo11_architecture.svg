@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2300" height="1100" viewBox="0 0 2300 1100">
+  <defs>
+    <style>
+      .title { font: 700 32px Arial, sans-serif; fill: #fff; }
+      .label { font: 700 24px Arial, sans-serif; fill: #14242a; }
+      .small { font: 600 19px Arial, sans-serif; fill: #1f3036; }
+      .tiny { font: 500 16px Arial, sans-serif; fill: #2d3e44; }
+      .header { fill: #075762; stroke: #063e46; stroke-width: 2; }
+      .panel { fill: #fff; stroke: #0e4b5b; stroke-width: 2.4; }
+      .conv { fill: #dff3f7; stroke: #225e6b; stroke-width: 2; }
+      .c3 { fill: #e7f0ff; stroke: #2d65bc; stroke-width: 2; }
+      .sppf { fill: #fff0df; stroke: #d9782d; stroke-width: 2; }
+      .c2psa { fill: #fff4c8; stroke: #d6a121; stroke-width: 2; }
+      .up { fill: #e2f5dd; stroke: #4d8c45; stroke-width: 2; }
+      .cat { fill: #fff; stroke: #222; stroke-width: 2; }
+      .rfa { fill: #ffe6a7; stroke: #d78300; stroke-width: 2; }
+      .rfa2 { fill: #dff0f6; stroke: #326a80; stroke-width: 2; }
+      .detect { fill: #e4f4dc; stroke: #4d8c45; stroke-width: 2; }
+      .arrow { fill: none; stroke: #111; stroke-width: 3; marker-end: url(#arrow); }
+      .skip { fill: none; stroke: #111; stroke-width: 3; stroke-dasharray: 8 7; marker-end: url(#arrow); }
+      .flow { fill: none; stroke: #111; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#111"/>
+    </marker>
+  </defs>
+
+  <rect width="2300" height="1100" fill="#fff"/>
+
+  <!-- Input -->
+  <text x="45" y="155" class="label">Input: 512 x 512 x 4</text>
+  <text x="45" y="190" class="label">KiDS u/g/r/i Image</text>
+  <g transform="translate(55 300)">
+    <polygon points="0,0 210,-52 355,18 145,70" fill="#111b23" stroke="#1e67c7" stroke-width="5"/>
+    <polygon points="0,95 210,43 355,113 145,165" fill="#111b23" stroke="#39a74a" stroke-width="5"/>
+    <polygon points="0,190 210,138 355,208 145,260" fill="#111b23" stroke="#db2d2d" stroke-width="5"/>
+    <polygon points="0,285 210,233 355,303 145,355" fill="#111b23" stroke="#c94a4a" stroke-width="5"/>
+    <text x="382" y="18" class="label" fill="#1e67c7">u</text>
+    <text x="382" y="113" class="label" fill="#39a74a">g</text>
+    <text x="382" y="208" class="label" fill="#db2d2d">r</text>
+    <text x="382" y="303" class="label" fill="#c94a4a">i</text>
+  </g>
+  <path d="M395 500 H475" class="arrow"/>
+
+  <!-- Backbone -->
+  <rect x="500" y="55" width="350" height="58" rx="8" class="header"/>
+  <text x="535" y="94" class="title">YOLO11n Backbone</text>
+  <rect x="490" y="130" width="370" height="820" rx="10" class="panel"/>
+  <g transform="translate(595 160)">
+    <rect x="0" y="0" width="160" height="48" rx="8" class="conv"/><text x="54" y="31" class="label">Conv</text>
+    <path d="M80 48 V82" class="flow"/>
+    <rect x="0" y="82" width="160" height="48" rx="8" class="c3"/><text x="51" y="113" class="label">C3k2</text>
+    <path d="M80 130 V164" class="flow"/>
+    <rect x="0" y="164" width="160" height="48" rx="8" class="conv"/><text x="54" y="195" class="label">Conv</text>
+    <path d="M80 212 V246" class="flow"/>
+    <rect x="0" y="246" width="160" height="48" rx="8" class="c3"/><text x="51" y="277" class="label">C3k2</text>
+    <text x="188" y="278" class="label">P3/8</text>
+    <path d="M160 270 H250" class="arrow"/>
+    <path d="M80 294 V328" class="flow"/>
+    <rect x="0" y="328" width="160" height="48" rx="8" class="conv"/><text x="54" y="359" class="label">Conv</text>
+    <path d="M80 376 V410" class="flow"/>
+    <rect x="0" y="410" width="160" height="48" rx="8" class="c3"/><text x="51" y="441" class="label">C3k2</text>
+    <text x="188" y="442" class="label">P4/16</text>
+    <path d="M160 434 H250" class="arrow"/>
+    <path d="M80 458 V492" class="flow"/>
+    <rect x="0" y="492" width="160" height="48" rx="8" class="conv"/><text x="54" y="523" class="label">Conv</text>
+    <path d="M80 540 V574" class="flow"/>
+    <rect x="0" y="574" width="160" height="48" rx="8" class="c3"/><text x="51" y="605" class="label">C3k2</text>
+    <path d="M80 622 V656" class="flow"/>
+    <rect x="0" y="656" width="160" height="48" rx="8" class="sppf"/><text x="49" y="687" class="label">SPPF</text>
+    <path d="M80 704 V738" class="flow"/>
+    <rect x="0" y="738" width="160" height="48" rx="8" class="c2psa"/><text x="42" y="769" class="label">C2PSA</text>
+    <text x="188" y="770" class="label">P5/32</text>
+    <path d="M160 762 H250" class="arrow"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="920" y="55" width="850" height="58" rx="8" class="header"/>
+  <text x="1212" y="94" class="title">Neck with RFAConv</text>
+  <rect x="900" y="130" width="890" height="820" rx="10" class="panel"/>
+
+  <text x="930" y="245" class="small">P5/32</text>
+  <text x="930" y="495" class="small">P4/16</text>
+  <text x="930" y="745" class="small">P3/8</text>
+
+  <!-- Backbone feature inputs enter only their intended Concat/start nodes -->
+  <path d="M845 922 H965 V230 H1020" class="arrow"/>
+  <path d="M845 594 H1005 V480 H1075" class="arrow"/>
+  <path d="M845 430 H1005 V730 H1075" class="arrow"/>
+
+  <!-- Top-down: P5 -> P4_top -->
+  <rect x="1020" y="205" width="130" height="50" rx="8" class="up"/>
+  <text x="1041" y="237" class="small">Upsample</text>
+  <path d="M1085 255 V455" class="arrow"/>
+  <rect x="1050" y="455" width="110" height="50" rx="8" class="cat"/>
+  <text x="1078" y="487" class="small">Concat</text>
+  <path d="M1160 480 H1215" class="arrow"/>
+  <rect x="1215" y="455" width="105" height="50" rx="8" class="c3"/>
+  <text x="1244" y="487" class="small">C3k2</text>
+  <path d="M1320 480 H1375" class="arrow"/>
+  <rect x="1375" y="455" width="125" height="50" rx="8" class="rfa"/>
+  <text x="1399" y="487" class="small">RFAConv</text>
+  <text x="1515" y="487" class="small">P4_top</text>
+
+  <!-- Top-down: P4_top -> P3_out -->
+  <path d="M1500 480 H1580 V610 H1165 V705" class="arrow"/>
+  <rect x="1100" y="610" width="130" height="50" rx="8" class="up"/>
+  <text x="1121" y="642" class="small">Upsample</text>
+  <path d="M1165 660 V705" class="arrow"/>
+  <rect x="1050" y="705" width="110" height="50" rx="8" class="cat"/>
+  <text x="1078" y="737" class="small">Concat</text>
+  <path d="M1160 730 H1215" class="arrow"/>
+  <rect x="1215" y="705" width="105" height="50" rx="8" class="c3"/>
+  <text x="1244" y="737" class="small">C3k2</text>
+  <path d="M1320 730 H1375" class="arrow"/>
+  <rect x="1375" y="705" width="125" height="50" rx="8" class="rfa"/>
+  <text x="1399" y="737" class="small">RFAConv</text>
+  <text x="1515" y="737" class="small">P3_out</text>
+
+  <!-- Bottom-up: P3_out -> P4_out -->
+  <path d="M1500 730 H1585 V665" class="arrow"/>
+  <rect x="1525" y="615" width="120" height="50" rx="8" class="rfa2"/>
+  <text x="1538" y="646" class="tiny">RFAConv s=2</text>
+  <path d="M1585 615 V530 H1615" class="arrow"/>
+  <rect x="1615" y="505" width="110" height="50" rx="8" class="cat"/>
+  <text x="1643" y="537" class="small">Concat</text>
+  <path d="M1500 480 H1670 V505" class="skip"/>
+  <path d="M1725 530 H1780" class="arrow"/>
+  <rect x="1780" y="505" width="105" height="50" rx="8" class="c3"/>
+  <text x="1809" y="537" class="small">C3k2</text>
+  <path d="M1885 530 H1940" class="arrow"/>
+  <rect x="1940" y="505" width="125" height="50" rx="8" class="rfa"/>
+  <text x="1964" y="537" class="small">RFAConv</text>
+  <text x="2080" y="537" class="small">P4_out</text>
+
+  <!-- Bottom-up: P4_out -> P5_out -->
+  <path d="M2065 530 H2110 V390 H1585 V365" class="arrow"/>
+  <rect x="1525" y="315" width="120" height="50" rx="8" class="rfa2"/>
+  <text x="1538" y="346" class="tiny">RFAConv s=2</text>
+  <path d="M1585 315 V280 H1615" class="arrow"/>
+  <rect x="1615" y="255" width="110" height="50" rx="8" class="cat"/>
+  <text x="1643" y="287" class="small">Concat</text>
+  <path d="M965 230 V185 H1670 V255" class="skip"/>
+  <text x="1240" y="180" class="tiny">P5 skip</text>
+  <path d="M1725 280 H1780" class="arrow"/>
+  <rect x="1780" y="255" width="105" height="50" rx="8" class="c3"/>
+  <text x="1809" y="287" class="small">C3k2</text>
+  <path d="M1885 280 H1940" class="arrow"/>
+  <rect x="1940" y="255" width="125" height="50" rx="8" class="rfa"/>
+  <text x="1964" y="287" class="small">RFAConv</text>
+  <text x="2080" y="287" class="small">P5_out</text>
+
+  <!-- Head -->
+  <rect x="2120" y="55" width="150" height="58" rx="8" class="header"/>
+  <text x="2160" y="94" class="title">Head</text>
+  <rect x="2110" y="130" width="170" height="820" rx="10" class="panel"/>
+  <rect x="2160" y="250" width="95" height="48" rx="8" class="detect"/>
+  <text x="2177" y="281" class="small">Detect</text>
+  <path d="M2065 280 H2160" class="arrow"/>
+  <rect x="2160" y="500" width="95" height="48" rx="8" class="detect"/>
+  <text x="2177" y="531" class="small">Detect</text>
+  <path d="M2065 530 H2160" class="arrow"/>
+  <rect x="2160" y="700" width="95" height="48" rx="8" class="detect"/>
+  <text x="2177" y="731" class="small">Detect</text>
+  <path d="M1500 730 H2160" class="arrow"/>
+  <rect x="2150" y="815" width="115" height="80" rx="8" class="cat"/>
+  <text x="2178" y="846" class="label">Box</text>
+  <text x="2200" y="875" class="label">+</text>
+  <text x="2168" y="904" class="label">Class</text>
+  <path d="M2208 298 V815" class="arrow"/>
+  <path d="M2208 548 V815" class="arrow"/>
+  <path d="M2208 748 V815" class="arrow"/>
+
+  <!-- Loss -->
+  <rect x="1320" y="990" width="430" height="60" rx="8" class="panel"/>
+  <text x="1380" y="1028" class="label">Loss = NWD + BCE + DFL</text>
+</svg>
